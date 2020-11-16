@@ -2,6 +2,7 @@ package models.pieces;
 
 import models.Colour;
 import models.board.Board;
+import models.board.Square;
 
 public abstract class Piece {
     private Colour colour;
@@ -28,5 +29,5 @@ public abstract class Piece {
         isAlive = alive;
     }
 
-    public abstract boolean isValidMove(Board board, Spot start, Spot end);
+    public abstract boolean isValidMove(Board board, Square current, Square target);
 }
