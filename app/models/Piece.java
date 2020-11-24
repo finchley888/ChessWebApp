@@ -1,12 +1,17 @@
-package models.pieces;
-
-import models.Colour;
-import models.board.Board;
-import models.board.Square;
+package models;
 
 public abstract class Piece {
     private Colour colour;
     private boolean isAlive;
+    private String Symbol;
+
+    public String getSymbol() {
+        return Symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        Symbol = symbol;
+    }
 
     public Piece (Colour colour){
         this.colour = colour;

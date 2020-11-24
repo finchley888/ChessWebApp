@@ -1,12 +1,13 @@
-package models.pieces;
-
-import models.Colour;
-import models.board.Board;
-import models.board.Square;
+package models;
 
 public class Knight extends Piece {
     public Knight(Colour colour) {
         super(colour);
+        if(colour == Colour.BLACK){
+            super.setSymbol("♞");
+        } else {
+            super.setSymbol("♘");
+        }
     }
 
     @Override

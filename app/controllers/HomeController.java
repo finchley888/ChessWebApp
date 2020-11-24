@@ -1,21 +1,51 @@
 package controllers;
 
-import play.mvc.*;
+import models.Board;
+import play.mvc.Controller;
+import play.mvc.Http;
+import play.mvc.Result;
+
+import javax.inject.Singleton;
 
 /**
  * This controller contains an action to handle HTTP requests
  * to the application's home page.
  */
+@Singleton
 public class HomeController extends Controller {
 
-    /**
-     * An action that renders an HTML page with a welcome message.
-     * The configuration in the <code>routes</code> file means that
-     * this method will be called when the application receives a
-     * <code>GET</code> request with a path of <code>/</code>.
-     */
-    public Result index() {
-        return ok(views.html.index.render());
+    private Board board;
+    private boolean moveMade = false;
+    private int xInitial;
+    private int yInitial;
+
+    public HomeController(){
+        this.board = new Board();
     }
+
+    /**
+     * Print the board action
+     */
+    public Result printBoard(Http.Request request){
+        return ok(views.html.index.render(board, request));
+    }
+
+    public Result playMade(int i, int j){
+
+        if(moveMade == false){
+            xInitial = i;
+            yInitial = j;
+            moveMade = true;
+            board.movePrepare(i,j);
+        } else {
+            moveMade = false;
+            board.move(xInitial, yInitial,i,j);
+            board.clearPlaceHolders();
+        }
+
+        return redirect(routes.HomeController.printBoard());
+    }
+
+
 
 }
