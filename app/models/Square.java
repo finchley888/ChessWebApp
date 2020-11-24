@@ -12,7 +12,7 @@ public class Square {
         if(piece != null) {
             return piece.getSymbol();
         }
-        return "";
+        return " ";
     }
 
     public Piece getPiece() {

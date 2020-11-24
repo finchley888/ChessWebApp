@@ -46,6 +46,12 @@ public class HomeController extends Controller {
         return redirect(routes.HomeController.printBoard());
     }
 
+    public Result resetBoard(){
+        board.reset();
+        moveMade = false;
+        return redirect(routes.HomeController.printBoard());
+    }
+
 
 
 }
