@@ -45,4 +45,6 @@ public abstract class Piece {
     }
 
     public abstract int[] giveValidMoves(Board board, Square current);
+
+    public abstract boolean isValidMove(Board board, Square current);
 }

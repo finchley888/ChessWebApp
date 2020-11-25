@@ -15,4 +15,9 @@ public class Queen extends Piece {
         //TODO: Finish this move validation
         return new int[]{0};
     }
+
+    @Override
+    public boolean isValidMove(Board board, Square current) {
+        return false;
+    }
 }

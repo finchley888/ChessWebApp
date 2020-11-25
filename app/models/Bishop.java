@@ -15,4 +15,9 @@ public class Bishop extends Piece{
         // TODO: Finish Bishop move validation
         return new int[]{0};
     }
+
+    @Override
+    public boolean isValidMove(Board board, Square current) {
+        return false;
+    }
 }

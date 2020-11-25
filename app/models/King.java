@@ -35,4 +35,9 @@ public class King extends Piece{
         }
         return validMoves.stream().mapToInt(i->i).toArray();
     }
+
+    @Override
+    public boolean isValidMove(Board board, Square current) {
+        return false;
+    }
 }
