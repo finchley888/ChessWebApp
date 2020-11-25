@@ -1,5 +1,8 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Rook extends Piece {
 
     public Rook(Colour colour) {
@@ -13,8 +16,27 @@ public class Rook extends Piece {
 
     @Override
     public int[] giveValidMoves(Board board, Square current){
-        // TODO: Finish this move validation
-        return new int[]{0};
+        List<Integer> validMoves = new ArrayList<Integer>();
+
+        int currentRow = current.getRow();
+        int currentColumn = current.getColumn();
+
+        for (int row = -8; row < 9; row++) {
+            for (int column = -8; column < 9; column++) {
+                int tempCol = currentColumn + column;
+                int tempRow = currentRow + row;
+                // check bounds
+                if(tempRow < 9 && tempRow > 0 && tempCol < 9 && tempCol > 0 ){
+                    // check horizontal or diag
+                    if((tempCol == currentColumn) || (tempRow == currentRow)) {
+                        if (board.getSymbolOnSquare(board.accessElement(tempCol, tempRow)) == "") {
+                            validMoves.add(board.accessElement(tempCol, tempRow));
+                        }
+                    }
+                }
+            }
+        }
+        return validMoves.stream().mapToInt(i->i).toArray();
     }
 
     @Override

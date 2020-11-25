@@ -1,5 +1,8 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Knight extends Piece {
     public Knight(Colour colour) {
         super(colour);
@@ -12,8 +15,25 @@ public class Knight extends Piece {
 
     @Override
     public int[] giveValidMoves(Board board, Square current){
-        // TODO: Finish Knight move validation
-        return new int[]{0};
+        //TODO: fix this movement
+        List<Integer> validMoves = new ArrayList<Integer>();
+
+        int currentRow = current.getRow();
+        int currentColumn = current.getColumn();
+
+        for (int row = -8; row < 9; row++) {
+            for (int column = -8; column < 9; column++) {
+                int tempCol = currentColumn + column;
+                int tempRow = currentRow + row;
+                // check bounds
+                if(tempRow < 9 && tempRow > 0 && tempCol < 9 && tempCol > 0 ){
+                    if (board.getSymbolOnSquare(board.accessElement(tempCol, tempRow)) == "") {
+                        validMoves.add(board.accessElement(tempCol, tempRow));
+                    }
+                }
+            }
+        }
+        return validMoves.stream().mapToInt(i->i).toArray();
     }
 
     @Override

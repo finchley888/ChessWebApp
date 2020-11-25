@@ -21,8 +21,8 @@ public class King extends Piece{
         int currentRow = current.getRow();
         int currentColumn = current.getColumn();
 
-        for (int row = -1; row < 1; row++) {
-            for (int column = -1; column < 1; column++) {
+        for (int row = -1; row < 2; row++) {
+            for (int column = -1; column < 2; column++) {
                 int tempCol = currentColumn + column;
                 int tempRow = currentRow + row;
                 // check bounds
