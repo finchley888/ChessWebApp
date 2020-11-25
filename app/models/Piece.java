@@ -4,6 +4,7 @@ public abstract class Piece {
     private Colour colour;
     private boolean isAlive;
     private String Symbol;
+    private int moveCounter;
 
     public String getSymbol() {
         return Symbol;
@@ -16,6 +17,7 @@ public abstract class Piece {
     public Piece (Colour colour){
         this.colour = colour;
         this.isAlive = true;
+        this.moveCounter = 0;
     }
 
     public Colour getColour() {
@@ -34,5 +36,13 @@ public abstract class Piece {
         isAlive = alive;
     }
 
-    public abstract boolean isValidMove(Board board, Square current, Square target);
+    public int getMoveCounter() {
+        return moveCounter;
+    }
+
+    public void updateMoveCounter(){
+        this.moveCounter ++;
+    }
+
+    public abstract int[] giveValidMoves(Board board, Square current);
 }

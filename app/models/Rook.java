@@ -12,8 +12,9 @@ public class Rook extends Piece {
     }
 
     @Override
-    public boolean isValidMove(Board board, Square current, Square target) {
-        return true;
+    public int[] giveValidMoves(Board board, Square current){
+        // TODO: Finish this move validation
+        return new int[]{0};
     }
 
 

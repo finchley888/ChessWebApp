@@ -13,31 +13,31 @@ public class Board {
         for (int row = 1; row < 9; row++) {
             for (int column = 1; column < 9; column++) {
                 if(row == 2){                                                               // white pawns
-                    board[accessElement(column, row)] = new Square( new Pawn(Colour.WHITE));
+                    board[accessElement(column, row)] = new Square( new Pawn(Colour.WHITE), row, column);
                 } else if(row == 7){                                                        // black pawns
-                    board[accessElement(column, row)] = new Square( new Pawn(Colour.BLACK));
+                    board[accessElement(column, row)] = new Square( new Pawn(Colour.BLACK), row, column);
                 } else if (row == 1 && ( column == 1 || column == 8)){                      // white rooks
-                    board[accessElement(column, row)] = new Square( new Rook(Colour.WHITE));
+                    board[accessElement(column, row)] = new Square( new Rook(Colour.WHITE), row, column);
                 } else if (row == 8 && ( column == 1 || column == 8)){                      // black rooks
-                    board[accessElement(column, row)] = new Square( new Rook(Colour.BLACK));
+                    board[accessElement(column, row)] = new Square( new Rook(Colour.BLACK), row, column);
                 } else if (row == 1 && ( column == 2 || column == 7)){                      // white knights
-                    board[accessElement(column, row)] = new Square( new Knight(Colour.WHITE));
+                    board[accessElement(column, row)] = new Square( new Knight(Colour.WHITE), row, column);
                 } else if (row == 8 && ( column == 2 || column == 7)){                      // black knights
-                    board[accessElement(column, row)] = new Square( new Knight(Colour.BLACK));
+                    board[accessElement(column, row)] = new Square( new Knight(Colour.BLACK), row, column);
                 } else if (row == 1 && ( column == 3 || column == 6)){                      // white bishops
-                    board[accessElement(column, row)] = new Square( new Bishop(Colour.WHITE));
+                    board[accessElement(column, row)] = new Square( new Bishop(Colour.WHITE), row, column);
                 } else if (row == 8 && ( column == 3 || column == 6)){                      // black bishops
-                    board[accessElement(column, row)] = new Square( new Bishop(Colour.BLACK));
+                    board[accessElement(column, row)] = new Square( new Bishop(Colour.BLACK), row, column);
                 } else if (row == 1 && ( column == 4 )){                                    // white queen
-                    board[accessElement(column, row)] = new Square( new Queen(Colour.WHITE));
+                    board[accessElement(column, row)] = new Square( new Queen(Colour.WHITE), row, column);
                 } else if (row == 1 && column == 5 ){                                       // white king
-                    board[accessElement(column, row)] = new Square( new King(Colour.WHITE));
+                    board[accessElement(column, row)] = new Square( new King(Colour.WHITE), row, column);
                 } else if (row == 8 && ( column == 4 )){                                    // black queen
-                    board[accessElement(column, row)] = new Square( new Queen(Colour.BLACK));
+                    board[accessElement(column, row)] = new Square( new Queen(Colour.BLACK), row, column);
                 } else if (row == 8 && column == 5){                                        // black king
-                    board[accessElement(column, row)] = new Square( new King(Colour.BLACK));
+                    board[accessElement(column, row)] = new Square( new King(Colour.BLACK), row, column);
                 } else {
-                    board[accessElement(column, row)] = new Square( null);
+                    board[accessElement(column, row)] = new Square( null, row, column);
                 }
             }
         }
@@ -59,19 +59,25 @@ public class Board {
     }
 
     public void move(int xInitial, int yInitial, int xFinal, int yFinal){
-        Piece temp = board[accessElement(xInitial, yInitial)].getPiece();
-        board[accessElement(xInitial, yInitial)].setPiece(null);
-        board[accessElement(xFinal,yFinal)].setPiece(temp);
+        if(board[accessElement(xInitial, yInitial)].getPiece().getColour() != board[accessElement(xFinal, yFinal)].getPiece().getColour()) {
+            Piece temp = board[accessElement(xInitial, yInitial)].getPiece();
+            board[accessElement(xInitial, yInitial)].setPiece(null);
+            board[accessElement(xFinal, yFinal)].setPiece(temp);
+            board[accessElement(xFinal, yFinal)].getPiece().updateMoveCounter();
+        }
     }
 
     public void movePrepare(int xInitial, int yInitial){
-        board[accessElement(xInitial, yInitial+1)].setPiece(new PlaceHolderPiece(Colour.BLACK));
-        board[accessElement(xInitial, yInitial+2)].setPiece(new PlaceHolderPiece(Colour.BLACK));
+        int[] validMoves = board[accessElement(xInitial, yInitial)].getPiece().giveValidMoves(this, board[accessElement(xInitial, yInitial)]);
+
+        for (int move:validMoves) {
+            board[move].setPiece(new PlaceHolderPiece(Colour.NILL));
+        }
     }
 
     public void clearPlaceHolders(){
         for (Square square :board) {
-            if(square.getSquareSymbol() != "") {
+            if(!square.getSquareSymbol().equals("")) {
                 if (square.getPiece().getClass().equals(PlaceHolderPiece.class)) {
                     square.setPiece(null);
                 }

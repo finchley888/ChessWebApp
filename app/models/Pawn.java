@@ -12,8 +12,23 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public boolean isValidMove(Board board, Square current, Square target) {
-        return false;
+    public int[] giveValidMoves(Board board, Square current){
+        // TODO: Finish Pawn move validation
+        if(super.getColour() == Colour.WHITE){
+            if(super.getMoveCounter() == 0){
+                return new int[]{board.accessElement(current.getColumn(), current.getRow()+1),
+                        board.accessElement(current.getColumn(), current.getRow()+2)};
+            } else {
+                return new int[]{board.accessElement(current.getColumn(), current.getRow()+1)};
+            }
+        } else {
+            if(super.getMoveCounter() == 0){
+                return new int[]{board.accessElement(current.getColumn(), current.getRow()-1),
+                        board.accessElement(current.getColumn(), current.getRow()-2)};
+            } else {
+                return new int[]{board.accessElement(current.getColumn(), current.getRow()-1)};
+            }
+        }
     }
 
 }

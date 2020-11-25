@@ -9,7 +9,7 @@ public class PlaceHolderPiece extends Piece {
     }
 
     @Override
-    public boolean isValidMove(Board board, Square current, Square target) {
-        return false;
+    public int[] giveValidMoves(Board board, Square current){
+        return new int[]{};
     }
 }

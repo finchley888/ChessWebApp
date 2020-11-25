@@ -2,5 +2,6 @@ package models;
 
 public enum Colour {
     WHITE,
-    BLACK
+    BLACK,
+    NILL
 }

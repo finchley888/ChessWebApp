@@ -1,9 +1,9 @@
 package models;
 
-public class Queen extends Piece{
+public class Queen extends Piece {
     public Queen(Colour colour) {
         super(colour);
-        if(colour == Colour.BLACK){
+        if (colour == Colour.BLACK) {
             super.setSymbol("♛");
         } else {
             super.setSymbol("♕");
@@ -11,7 +11,8 @@ public class Queen extends Piece{
     }
 
     @Override
-    public boolean isValidMove(Board board, Square current, Square target) {
-        return false;
+    public int[] giveValidMoves(Board board, Square current) {
+        //TODO: Finish this move validation
+        return new int[]{0};
     }
 }

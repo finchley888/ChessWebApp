@@ -11,7 +11,8 @@ public class Knight extends Piece {
     }
 
     @Override
-    public boolean isValidMove(Board board, Square current, Square target) {
-        return false;
+    public int[] giveValidMoves(Board board, Square current){
+        // TODO: Finish Knight move validation
+        return new int[]{0};
     }
 }
