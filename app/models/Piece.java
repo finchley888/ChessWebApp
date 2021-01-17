@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 public abstract class Piece {
     private Colour colour;
     private boolean isAlive;

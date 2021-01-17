@@ -1,7 +1,11 @@
 package models;
 
+import java.util.Arrays;
+import java.util.stream.IntStream;
+
 public class Board {
     private Square[] board = initialise();
+    private int[] currentValidMoves;
 
     public Board() {}
 
@@ -54,16 +58,56 @@ public class Board {
         return (8 * ( ( 9 - rank )  - 1 ) ) + ( ( 9 - file ) -1 );
     }
 
+    public Piece getPieceOnSquare(int file, int rank){
+        if(board[accessElement(file, rank)].getPiece() != null){
+            return board[accessElement(file, rank)].getPiece();
+        }
+        return new PlaceHolderPiece(Colour.NILL);
+    }
+
+    public Piece getPieceOnSquare(int index){
+        if(board[index].getPiece() != null){
+            return board[index].getPiece();
+        }
+        return new PlaceHolderPiece(Colour.NILL);
+    }
+
     public String getSymbolOnSquare(int index) {
         return board[index].getSquareSymbol();
     }
 
     public void move(int xInitial, int yInitial, int xFinal, int yFinal){
-        if(board[accessElement(xInitial, yInitial)].getPiece().getColour() != board[accessElement(xFinal, yFinal)].getPiece().getColour()) {
-            Piece temp = board[accessElement(xInitial, yInitial)].getPiece();
-            board[accessElement(xInitial, yInitial)].setPiece(null);
-            board[accessElement(xFinal, yFinal)].setPiece(temp);
-            board[accessElement(xFinal, yFinal)].getPiece().updateMoveCounter();
+        if(IntStream.of(currentValidMoves).anyMatch(x -> x == accessElement(xFinal, yFinal))) {
+            if(board[accessElement(xInitial, yInitial)].getPiece().getClass().equals(King.class) && xInitial + 2 == xFinal ){ //castling
+                // move king
+                Piece temp = board[accessElement(xInitial, yInitial)].getPiece();
+                board[accessElement(xInitial, yInitial)].setPiece(null);
+                board[accessElement(xFinal, yFinal)].setPiece(temp);
+                board[accessElement(xFinal, yFinal)].getPiece().updateMoveCounter();
+
+                // move rook
+                Piece rook = board[accessElement(xInitial+3, yInitial)].getPiece();
+                board[accessElement(xInitial+3, yInitial)].setPiece(null);
+                board[accessElement(xInitial+1, yInitial)].setPiece(rook);
+
+            } else if(board[accessElement(xInitial, yInitial)].getPiece().getClass().equals(King.class) && xInitial - 2 == xFinal){ //castling
+                // move king
+                Piece temp = board[accessElement(xInitial, yInitial)].getPiece();
+                board[accessElement(xInitial, yInitial)].setPiece(null);
+                board[accessElement(xFinal, yFinal)].setPiece(temp);
+                board[accessElement(xFinal, yFinal)].getPiece().updateMoveCounter();
+
+                // move rook
+                Piece rook = board[accessElement(xInitial-4, yInitial)].getPiece();
+                board[accessElement(xInitial-4, yInitial)].setPiece(null);
+                board[accessElement(xInitial-1, yInitial)].setPiece(rook);
+
+            }else {
+                Piece temp = board[accessElement(xInitial, yInitial)].getPiece();
+                board[accessElement(xInitial, yInitial)].setPiece(null);
+                board[accessElement(xFinal, yFinal)].setPiece(temp);
+                board[accessElement(xFinal, yFinal)].getPiece().updateMoveCounter();
+            }
         }
     }
 
@@ -71,8 +115,12 @@ public class Board {
         int[] validMoves = board[accessElement(xInitial, yInitial)].getPiece().giveValidMoves(this, board[accessElement(xInitial, yInitial)]);
 
         for (int move:validMoves) {
-            board[move].setPiece(new PlaceHolderPiece(Colour.NILL));
+            if(board[move].getPiece() == null) {
+                board[move].setPiece(new PlaceHolderPiece(Colour.NILL));
+            }
         }
+
+        currentValidMoves = validMoves;
     }
 
     public void clearPlaceHolders(){

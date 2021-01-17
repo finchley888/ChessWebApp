@@ -51,7 +51,4 @@ public class HomeController extends Controller {
         moveMade = false;
         return redirect(routes.HomeController.printBoard());
     }
-
-
-
 }

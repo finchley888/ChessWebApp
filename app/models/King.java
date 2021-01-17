@@ -27,12 +27,31 @@ public class King extends Piece{
                 int tempRow = currentRow + row;
                 // check bounds
                 if(tempRow < 9 && tempRow > 0 && tempCol < 9 && tempCol > 0 ){
-                    if(board.getSymbolOnSquare(board.accessElement(tempCol,tempRow)) == ""){
+                    if(board.getSymbolOnSquare(board.accessElement(tempCol,tempRow)) == "" || !board.getPieceOnSquare(tempCol,tempRow).getColour().equals(this.getColour())){
                         validMoves.add(board.accessElement(tempCol,tempRow));
                     }
                 }
             }
         }
+
+        //castling
+        if(super.getMoveCounter() == 0){
+            if(board.getPieceOnSquare(currentColumn + 1,currentRow).getClass().equals(PlaceHolderPiece.class) &&
+                    board.getPieceOnSquare(currentColumn + 2,currentRow).getClass().equals(PlaceHolderPiece.class) &&
+                    board.getPieceOnSquare(currentColumn + 3,currentRow).getClass().equals(Rook.class) &&
+                    board.getPieceOnSquare(currentColumn + 3,currentRow).getMoveCounter() == 0){
+                validMoves.add(board.accessElement(currentColumn + 2,currentRow));
+            }
+
+            if(board.getPieceOnSquare(currentColumn - 1,currentRow).getClass().equals(PlaceHolderPiece.class) &&
+                    board.getPieceOnSquare(currentColumn - 2,currentRow).getClass().equals(PlaceHolderPiece.class) &&
+                    board.getPieceOnSquare(currentColumn - 3,currentRow).getClass().equals(PlaceHolderPiece.class) &&
+                    board.getPieceOnSquare(currentColumn - 4,currentRow).getClass().equals(Rook.class) &&
+                    board.getPieceOnSquare(currentColumn - 4,currentRow).getMoveCounter() == 0){
+                validMoves.add(board.accessElement(currentColumn - 2,currentRow));
+            }
+        }
+
         return validMoves.stream().mapToInt(i->i).toArray();
     }
 

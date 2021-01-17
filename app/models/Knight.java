@@ -17,22 +17,24 @@ public class Knight extends Piece {
     public int[] giveValidMoves(Board board, Square current){
         //TODO: fix this movement
         List<Integer> validMoves = new ArrayList<Integer>();
-
+        List<Integer> positionModifiers = new ArrayList<>();
+        positionModifiers.add(1);
+        positionModifiers.add(2);
+        positionModifiers.add(-1);
+        positionModifiers.add(-2);
         int currentRow = current.getRow();
         int currentColumn = current.getColumn();
 
-        for (int row = -8; row < 9; row++) {
-            for (int column = -8; column < 9; column++) {
-                int tempCol = currentColumn + column;
-                int tempRow = currentRow + row;
-                // check bounds
-                if(tempRow < 9 && tempRow > 0 && tempCol < 9 && tempCol > 0 ){
-                    if (board.getSymbolOnSquare(board.accessElement(tempCol, tempRow)) == "") {
-                        validMoves.add(board.accessElement(tempCol, tempRow));
-                    }
+        for (int rowPosition: positionModifiers) {
+            for (int colPosition:positionModifiers) {
+                int tempRow = currentRow+rowPosition;
+                int tempCol = currentColumn+colPosition;
+                if(Math.abs(rowPosition) != Math.abs(colPosition) && tempRow > 0 && tempRow < 9 && tempCol > 0 && tempCol < 9 && !board.getPieceOnSquare(board.accessElement(tempCol,tempRow)).getColour().equals(this.getColour())){
+                    validMoves.add(board.accessElement(tempCol,tempRow));
                 }
             }
         }
+
         return validMoves.stream().mapToInt(i->i).toArray();
     }
 

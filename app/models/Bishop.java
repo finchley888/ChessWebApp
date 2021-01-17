@@ -20,21 +20,84 @@ public class Bishop extends Piece{
         int currentRow = current.getRow();
         int currentColumn = current.getColumn();
 
-        for (int row = -8; row < 9; row++) {
-            for (int column = -8; column < 9; column++) {
-                int tempCol = currentColumn + column;
-                int tempRow = currentRow + row;
-                // check bounds
-                if(tempRow < 9 && tempRow > 0 && tempCol < 9 && tempCol > 0 ){
-                    // check horizontal or diag
-                    if((Math.abs(tempRow-currentRow) == Math.abs(tempCol - currentColumn))) {
-                        if (board.getSymbolOnSquare(board.accessElement(tempCol, tempRow)) == "") {
-                            validMoves.add(board.accessElement(tempCol, tempRow));
-                        }
-                    }
-                }
+
+        boolean alreadyHitOpposingColour = false;
+        // four different loops, break when we hit a piece
+        for (int NE = 1; NE < 9; NE++) {
+
+            int tempRow = currentRow + NE;
+            int tempCol = currentColumn + NE;
+            if(tempRow < 1 || tempRow > 8 || tempCol < 1 || tempCol > 8){
+                break;
+            }
+            if (board.getSymbolOnSquare(board.accessElement(tempCol, tempRow)).equals("") && !alreadyHitOpposingColour) {
+                validMoves.add(board.accessElement(tempCol, tempRow));
+            } else if(!board.getPieceOnSquare(tempCol,tempRow).getColour().equals(this.getColour()) && !alreadyHitOpposingColour) {
+                validMoves.add(board.accessElement(tempCol, tempRow));
+                alreadyHitOpposingColour = true;
+            } else {
+                break;
             }
         }
+
+        alreadyHitOpposingColour = false;
+        // four different loops, break when we hit a piece
+        for (int SE = 1; SE < 9; SE++) {
+
+            int tempRow = currentRow - SE;
+            int tempCol = currentColumn + SE;
+            if(tempRow < 1 || tempRow > 8 || tempCol < 1 || tempCol > 8){
+                break;
+            }
+            if (board.getSymbolOnSquare(board.accessElement(tempCol, tempRow)).equals("") && !alreadyHitOpposingColour) {
+                validMoves.add(board.accessElement(tempCol, tempRow));
+            } else if(!board.getPieceOnSquare(tempCol,tempRow).getColour().equals(this.getColour()) && !alreadyHitOpposingColour) {
+                validMoves.add(board.accessElement(tempCol, tempRow));
+                alreadyHitOpposingColour = true;
+            } else {
+                break;
+            }
+        }
+
+        alreadyHitOpposingColour = false;
+        // four different loops, break when we hit a piece
+        for (int SW = 1; SW < 9; SW++) {
+
+            int tempRow = currentRow - SW;
+            int tempCol = currentColumn - SW;
+            if(tempRow < 1 || tempRow > 8 || tempCol < 1 || tempCol > 8){
+                break;
+            }
+            if (board.getSymbolOnSquare(board.accessElement(tempCol, tempRow)).equals("") && !alreadyHitOpposingColour) {
+                validMoves.add(board.accessElement(tempCol, tempRow));
+            } else if(!board.getPieceOnSquare(tempCol,tempRow).getColour().equals(this.getColour()) && !alreadyHitOpposingColour) {
+                validMoves.add(board.accessElement(tempCol, tempRow));
+                alreadyHitOpposingColour = true;
+            } else {
+                break;
+            }
+        }
+
+        alreadyHitOpposingColour = false;
+        // four different loops, break when we hit a piece
+        for (int NW = 1; NW < 9; NW++) {
+
+            int tempRow = currentRow + NW;
+            int tempCol = currentColumn - NW;
+            if(tempRow < 1 || tempRow > 8 || tempCol < 1 || tempCol > 8){
+                break;
+            }
+            if (board.getSymbolOnSquare(board.accessElement(tempCol, tempRow)).equals("") && !alreadyHitOpposingColour) {
+                validMoves.add(board.accessElement(tempCol, tempRow));
+            } else if(!board.getPieceOnSquare(tempCol,tempRow).getColour().equals(this.getColour()) && !alreadyHitOpposingColour) {
+                validMoves.add(board.accessElement(tempCol, tempRow));
+                alreadyHitOpposingColour = true;
+            } else {
+                break;
+            }
+        }
+
+
         return validMoves.stream().mapToInt(i->i).toArray();
     }
 
