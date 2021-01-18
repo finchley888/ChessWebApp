@@ -15,6 +15,11 @@
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
     </head>
     <body>
+        <ul>
+            <li><a href="#home">Welcome To Chess</a></li>
+            <li style="float:right"><a class="active" href="@routes.HomeController.resetBoard()">Reset</a></li>
+
+        </ul>
         @* And here's where we render the `Html` object containing
          * the page content. *@
         @content

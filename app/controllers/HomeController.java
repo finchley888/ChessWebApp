@@ -1,6 +1,7 @@
 package controllers;
 
 import models.Board;
+import models.Game;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -14,41 +15,26 @@ import javax.inject.Singleton;
 @Singleton
 public class HomeController extends Controller {
 
-    private Board board;
-    private boolean moveMade = false;
-    private int xInitial;
-    private int yInitial;
+    private Game game;
 
     public HomeController(){
-        this.board = new Board();
+        this.game = new Game();
     }
 
     /**
      * Print the board action
      */
     public Result printBoard(Http.Request request){
-        return ok(views.html.index.render(board, request));
+        return ok(views.html.index.render(game.getBoard(), game, request));
     }
 
     public Result playMade(int i, int j){
-
-        if(moveMade == false){
-            xInitial = i;
-            yInitial = j;
-            moveMade = true;
-            board.movePrepare(i,j);
-        } else {
-            moveMade = false;
-            board.move(xInitial, yInitial,i,j);
-            board.clearPlaceHolders();
-        }
-
+        game.playMade(i,j);
         return redirect(routes.HomeController.printBoard());
     }
 
     public Result resetBoard(){
-        board.reset();
-        moveMade = false;
+        game.newGame();
         return redirect(routes.HomeController.printBoard());
     }
 }

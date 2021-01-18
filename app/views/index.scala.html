@@ -1,10 +1,10 @@
 @import play.mvc.Http.Request
 @import models.Board
-@(board: models.Board)(implicit request: Request)
+@import models.Game
+@(board: models.Board, game: models.Game)(implicit request: Request)
 
 @main("Welcome Chess 0.1") {
-  <h1>Welcome to Chess!</h1>
-  <a href="@routes.HomeController.resetBoard()">Reset!</a>
+
 
 <table class="chess-board">
   <tbody>
@@ -109,6 +109,8 @@
   </tr>
   </tbody>
 </table>
+
+<div>@game.getCurrentPlayer()</div>
 
 
 }

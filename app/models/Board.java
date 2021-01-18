@@ -111,6 +111,10 @@ public class Board {
         }
     }
 
+    public boolean isValidMove(int xFinal, int yFinal){
+        return IntStream.of(currentValidMoves).anyMatch(x -> x == accessElement(xFinal, yFinal));
+    }
+
     public void movePrepare(int xInitial, int yInitial){
         int[] validMoves = board[accessElement(xInitial, yInitial)].getPiece().giveValidMoves(this, board[accessElement(xInitial, yInitial)]);
 
