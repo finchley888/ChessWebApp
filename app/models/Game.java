@@ -5,6 +5,9 @@ public class Game {
     private boolean moveMade;
     private int xInitial;
     private int yInitial;
+    private int xFinal;
+    private int yFinal;
+    private int uninit;
     private Colour currentTurn;
 
     public Game() {
@@ -23,20 +26,30 @@ public class Game {
         if(moveMade == false){
             xInitial = i;
             yInitial = j;
+            xFinal = uninit;
+            yFinal = uninit;
             moveMade = true;
             board.movePrepare(i,j);
         } else if (board.getPieceOnSquare(i,j).getColour() == currentTurn && !(i == xInitial && j == yInitial)){
             board.clearPlaceHolders();
             xInitial = i;
             yInitial = j;
+            xFinal = uninit;
+            yFinal = uninit;
             moveMade = true;
             board.movePrepare(i,j);
         } else if (i == xInitial && j == yInitial || !board.isValidMove(i,j) ){
             board.clearPlaceHolders();
+            xInitial = uninit;
+            yInitial = uninit;
+            xFinal = uninit;
+            yFinal = uninit;
             moveMade = false;
         } else {
             moveMade = false;
             board.move(xInitial, yInitial,i,j);
+            xFinal = i;
+            yFinal = j;
             board.clearPlaceHolders();
             currentTurn = currentTurn.updateColour();
         }
@@ -68,4 +81,19 @@ public class Game {
         return currentTurn == Colour.WHITE ? "White" : "Black";
     }
 
+    public int getxInitial(){
+        return xInitial;
+    }
+
+    public int getyInitial() {
+        return yInitial;
+    }
+
+    public int getxFinal() {
+        return xFinal;
+    }
+
+    public int getyFinal() {
+        return yFinal;
+    }
 }

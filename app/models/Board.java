@@ -1,11 +1,13 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
 public class Board {
     private Square[] board = initialise();
     private int[] currentValidMoves;
+    private ArrayList<String> moves = new ArrayList<>();
 
     public Board() {}
 
@@ -72,6 +74,10 @@ public class Board {
         return new PlaceHolderPiece(Colour.NILL);
     }
 
+    public Square getSquare(int file, int rank){
+        return board[accessElement(file, rank)];
+    }
+
     public String getSymbolOnSquare(int index) {
         return board[index].getSquareSymbol();
     }
@@ -109,6 +115,7 @@ public class Board {
                 board[accessElement(xFinal, yFinal)].getPiece().updateMoveCounter();
             }
         }
+        recordMove(xInitial, yInitial, xFinal, yFinal);
     }
 
     public boolean isValidMove(int xFinal, int yFinal){
@@ -139,5 +146,41 @@ public class Board {
 
     public void reset(){
         board = initialise();
+        moves = new ArrayList<>();
     }
+
+    private void recordMove(int xInitial, int yInitial, int xFinal, int yFinal){
+        // generate empty array to be added to the array list
+        String xInitValue = Character.toString((char) xInitial+96);
+        String xFinalValue = Character.toString((char) xFinal+96);
+        moves.add( xInitValue + yInitial + " - > " + xFinalValue + yFinal);
+    }
+
+    public ArrayList<String> getMoves(){
+        return moves;
+    }
+
+    public boolean isInCheck(Colour kingsColour){
+        ArrayList<Integer> allowedOfOppositeColour = new ArrayList<>();
+        //loop over each of the pieces of opposite colour, if the pieces can take the king then he is in check
+        for (Square square:board) {
+            // if the opposite colour of the piece on the square is the kings colour
+            if(square.getPiece() != null) {
+                if (square.getPiece().getColour().updateColour() == kingsColour) {
+                    int[] moves = square.getPiece().giveValidMoves(this, square);
+                    for (int move : moves) {
+                        allowedOfOppositeColour.add(move);
+                    }
+                }
+            }
+        }
+
+        for (Integer index: allowedOfOppositeColour) {
+            if(getPieceOnSquare(index).getClass().equals(King.class)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

@@ -8,7 +8,14 @@
             .chess-board td { width: 1.5em; height: 1.5em; text-align: center; font-size: 32px; line-height: 0;}
             .chess-board .light { background: #eeeed2; }
             .chess-board .dark { background: #769656; }
-            .chess-board td a {text-decoration: none; color: black;}
+            .chess-board .selected { background: #00BFFF; }
+            .chess-board .targeted { background: #00FF7F; }
+
+            .chess-board td a {text-decoration: none; color: black; display:block;}
+            .chess-board td a:hover {
+                               transform: scale(1.3); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+                             }
+
 
 ul {
   list-style-type: none;
@@ -36,4 +43,34 @@ li a:hover:not(.active) {
 
 .active {
   background-color: #4CAF50;
+}
+
+/* Create three unequal columns that floats next to each other */
+.column {
+  float: left;
+  padding: 10px;
+}
+
+/* Left and right column */
+.column.side {
+  width: 25%;
+}
+
+/* Middle column */
+.column.middle {
+  width: 70%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column.side, .column.middle {
+    width: 100%;
+  }
 }
