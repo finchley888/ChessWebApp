@@ -113,7 +113,17 @@ public class Board {
                 board[accessElement(xInitial-4, yInitial)].setPiece(null);
                 board[accessElement(xInitial-1, yInitial)].setPiece(rook);
 
-            }else {
+            } else if(board[accessElement(xInitial, yInitial)].getPiece().getClass().equals(Pawn.class) && xInitial != xFinal && board[accessElement(xFinal, yFinal)].getPiece().getClass().equals(PlaceHolderPiece.class) ){ //enpassent
+                // move pawn
+                Piece temp = board[accessElement(xInitial, yInitial)].getPiece();
+                board[accessElement(xInitial, yInitial)].setPiece(null);
+                board[accessElement(xFinal, yFinal)].setPiece(temp);
+                board[accessElement(xFinal, yFinal)].getPiece().updateMoveCounter();
+
+                // remove enemy pawn
+                board[accessElement(xFinal, yInitial)].setPiece(null);
+
+            } else {
 
                 Piece temp = board[accessElement(xInitial, yInitial)].getPiece();
                 board[accessElement(xInitial, yInitial)].setPiece(null);
