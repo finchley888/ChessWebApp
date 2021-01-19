@@ -12,37 +12,45 @@
   <div class="column middle">
     </br></br></br></br>
     </br></br>
-    <table class="chess-board">
-      <tbody>
-      <tr>
-        <th></th>
-        <th>A</th>
-        <th>B</th>
-        <th>C</th>
-        <th>D</th>
-        <th>E</th>
-        <th>F</th>
-        <th>G</th>
-        <th>H</th>
-      </tr>
-      @for(row <- (1 to 8).reverse){
-      <tr>
-        <th>@row</th>
-        @for(column <- 1 until 9){
-          @if(row == game.getyInitial() && column == game.getxInitial()) {
-            <td class="selected"><a href="@routes.HomeController.playMade(column,row)">@board.getSymbolOnSquare(board.accessElement(column, row))</a></td>
-          } else if(row == game.getyFinal() && column == game.getxFinal()) {
-            <td class="targeted"><a href="@routes.HomeController.playMade(column,row)">@board.getSymbolOnSquare(board.accessElement(column, row))</a></td>
-          } else if( (row + column) % 2 == 1){
-            <td class="light"><a href="@routes.HomeController.playMade(column,row)">@board.getSymbolOnSquare(board.accessElement(column, row))</a></td>
-          } else {
-            <td class="dark"><a href="@routes.HomeController.playMade(column,row)">@board.getSymbolOnSquare(board.accessElement(column, row))</a></td>
+    @if(board.isInCheckMate(Colour.WHITE)){
+      <h1>CHECK MATE, BLACK WINS... Please Reset</h1>
+    } else if(board.isInCheckMate(Colour.BLACK)){
+      <h1>CHECK MATE, WHITE WINS... Please Reset</h1>
+    } else {
+      <table class="chess-board">
+        <tbody>
+        <tr>
+          <th></th>
+          <th>A</th>
+          <th>B</th>
+          <th>C</th>
+          <th>D</th>
+          <th>E</th>
+          <th>F</th>
+          <th>G</th>
+          <th>H</th>
+        </tr>
+        @for(row <- (1 to 8).reverse){
+        <tr>
+          <th>@row</th>
+          @for(column <- 1 until 9){
+            @if(board.isInCheck(game.getCurrentTurn()) && board.isKingsSquare(row, column, game.getCurrentTurn())) {
+              <td class="check"><a href="@routes.HomeController.playMade(column,row)">@board.getSymbolOnSquare(board.accessElement(column, row))</a></td>
+            } else if(row == game.getyInitial() && column == game.getxInitial()) {
+              <td class="selected"><a href="@routes.HomeController.playMade(column,row)">@board.getSymbolOnSquare(board.accessElement(column, row))</a></td>
+            } else if(row == game.getyFinal() && column == game.getxFinal()) {
+              <td class="targeted"><a href="@routes.HomeController.playMade(column,row)">@board.getSymbolOnSquare(board.accessElement(column, row))</a></td>
+            } else if( (row + column) % 2 == 1){
+              <td class="light"><a href="@routes.HomeController.playMade(column,row)">@board.getSymbolOnSquare(board.accessElement(column, row))</a></td>
+            } else {
+              <td class="dark"><a href="@routes.HomeController.playMade(column,row)">@board.getSymbolOnSquare(board.accessElement(column, row))</a></td>
+            }
           }
+        </tr>
         }
-      </tr>
-      }
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    }
   </div>
 
 
@@ -55,6 +63,10 @@
     <div>@board.isInCheck(Colour.WHITE)</div>
     <h3>Black in check: </h3>
     <div>@board.isInCheck(Colour.BLACK)</div>
+    <h3>White in checkmate: </h3>
+    <div>@board.isInCheckMate(Colour.WHITE)</div>
+    <h3>Black in checkmate: </h3>
+    <div>@board.isInCheckMate(Colour.BLACK)</div>
 
     <h3 style="text-align:center;"> - Moves - </h3>
 

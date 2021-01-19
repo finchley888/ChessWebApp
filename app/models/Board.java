@@ -1,5 +1,8 @@
 package models;
 
+import jdk.swing.interop.SwingInterOpUtils;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.IntStream;
@@ -57,8 +60,10 @@ public class Board {
      * @return the integer value of the board
      */
     public int accessElement(int file, int rank){
-        return (8 * ( ( 9 - rank )  - 1 ) ) + ( ( 9 - file ) -1 );
+        return (8 * ( ( 9 - rank ) - 1) ) + ( ( 9 - file ) -1 );
     }
+    public int getXValueFromIndex(int index){ return 8 - (index % 8);}
+    public int getYValueFromIndex(int index){ return 8 - (index / (int) 8) ;}
 
     public Piece getPieceOnSquare(int file, int rank){
         if(board[accessElement(file, rank)].getPiece() != null){
@@ -109,10 +114,12 @@ public class Board {
                 board[accessElement(xInitial-1, yInitial)].setPiece(rook);
 
             }else {
+
                 Piece temp = board[accessElement(xInitial, yInitial)].getPiece();
                 board[accessElement(xInitial, yInitial)].setPiece(null);
                 board[accessElement(xFinal, yFinal)].setPiece(temp);
                 board[accessElement(xFinal, yFinal)].getPiece().updateMoveCounter();
+
             }
         }
         recordMove(xInitial, yInitial, xFinal, yFinal);
@@ -125,13 +132,24 @@ public class Board {
     public void movePrepare(int xInitial, int yInitial){
         int[] validMoves = board[accessElement(xInitial, yInitial)].getPiece().giveValidMoves(this, board[accessElement(xInitial, yInitial)]);
 
-        for (int move:validMoves) {
+
+        ArrayList<Integer> validMovesAfterCheck = new ArrayList<>();
+
+        for (int index:validMoves) {
+            int x = getXValueFromIndex(index);
+            int y = getYValueFromIndex(index);
+            if(!willBeInCheck(this.getPieceOnSquare(xInitial,yInitial).getColour(),xInitial, yInitial,  x,  y)){
+                validMovesAfterCheck.add(index);
+            }
+        }
+
+        for (int move:validMovesAfterCheck) {
             if(board[move].getPiece() == null) {
                 board[move].setPiece(new PlaceHolderPiece(Colour.NILL));
             }
         }
 
-        currentValidMoves = validMoves;
+        currentValidMoves = validMovesAfterCheck.stream().mapToInt(i -> i).toArray();
     }
 
     public void clearPlaceHolders(){
@@ -181,6 +199,67 @@ public class Board {
             }
         }
         return false;
+    }
+
+    public boolean willBeInCheck(Colour kingsColour, int xInitial, int yInitial, int xFinal, int yFinal) {
+        //move the piece to the square, and see if the king is then in check
+        // store the target piece away somewhere
+        Piece piece = null;
+        if (board[accessElement(xFinal, yFinal)].getPiece()!=null){
+            piece = board[accessElement(xFinal, yFinal)].getPiece();
+        }
+
+        Piece temp = board[accessElement(xInitial, yInitial)].getPiece();
+        board[accessElement(xInitial, yInitial)].setPiece(null);
+        board[accessElement(xFinal, yFinal)].setPiece(temp);
+
+
+        if(isInCheck(kingsColour)){
+            // move the piece back
+            board[accessElement(xInitial, yInitial)].setPiece(temp);
+
+            // move the placeholder piece back
+
+            board[accessElement(xFinal, yFinal)].setPiece(piece);
+            // move the placeholder piece back
+            if(piece != null){
+                board[accessElement(xFinal, yFinal)].setPiece(piece);
+            }
+            return true;
+        }
+        // move the piece back
+
+        board[accessElement(xInitial, yInitial)].setPiece(temp);
+
+        // move the placeholder piece back
+
+        board[accessElement(xFinal, yFinal)].setPiece(piece);
+
+
+        return false;
+    }
+
+    public boolean isInCheckMate(Colour kingsColour){
+        for (int index = 0; index < board.length; index++) {
+            if(this.getPieceOnSquare(index).getColour().equals(kingsColour)){
+                int[] validMoves = board[index].getPiece().giveValidMoves(this, board[index]);
+
+                for (int move :validMoves) {
+                    int xinitial = getXValueFromIndex(index);
+                    int yinitial = getYValueFromIndex(index);
+                    int xFinal = getXValueFromIndex(move);
+                    int yFinal = getYValueFromIndex(move);
+                    if(!willBeInCheck(kingsColour,xinitial,yinitial,xFinal,yFinal)){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isKingsSquare(int row, int column, Colour kingsColour){
+        return this.getPieceOnSquare(column, row).getClass().equals(King.class) && this.getPieceOnSquare(column,row).getColour().equals(kingsColour);
     }
 
 }
