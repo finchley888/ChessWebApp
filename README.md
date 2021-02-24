@@ -1,5 +1,5 @@
 # ChessWebApp
-A play framework chess application, bult with the Play for Java framework
+A play framework chess application, built with the Play for Java framework
 
 # How to run this web application
 1. Install SBT version 1.3.13
